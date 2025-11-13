@@ -10,7 +10,8 @@ rake-nltk
 nltk
 
 # AI/LLM Integration
-serpapi
+google-search-results
+
 groq
 python-dotenv
 
