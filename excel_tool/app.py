@@ -18,7 +18,7 @@ if uploaded:
     if "Oustanding Amount" in df.columns and "Outstanding Amount" not in df.columns:
         df.rename(columns={"Oustanding Amount": "Outstanding Amount"}, inplace=True)
 
-    required = ["CustomerCode", "Transdate", "InvoiceType", "Outstanding Amount"]
+    required = ["CustomerCode", "Invoice/Receipt Date", "InvoiceType", "Outstanding Amount"]
     missing = [c for c in required if c not in df.columns]
 
     if missing:

@@ -3,12 +3,12 @@ import pandas as pd
 def process_settlement(df):
     """
     Applies FIFO settlement logic to the dataframe.
-    Expects columns: 'CustomerCode', 'Transdate', 'Outstanding Amount'.
+    Expects columns: 'CustomerCode', 'Invoice/Receipt Date', 'Outstanding Amount'.
     Returns dataframe with 'Pending Amount' column.
     """
     # Clean data
     df = df.copy()
-    df["Transdate"] = pd.to_datetime(df["Transdate"], errors="coerce")
+    df["Invoice/Receipt Date"] = pd.to_datetime(df["Invoice/Receipt Date"], errors="coerce")
     
     # Handle column name normalization inside the function or assume it's done before?
     # The test passes 'Outstanding Amount'. app.py handles the rename before calling this.
@@ -16,10 +16,15 @@ def process_settlement(df):
     if "Oustanding Amount" in df.columns and "Outstanding Amount" not in df.columns:
         df.rename(columns={"Oustanding Amount": "Outstanding Amount"}, inplace=True)
         
-    df["Amount"] = df["Outstanding Amount"].astype(float)
+    # Fill missing CustomerCode to prevent groupby dropping them
+    df["CustomerCode"] = df["CustomerCode"].fillna("Unassigned")
+
+    # Fill missing Outstanding Amount with 0 for calculation purposes (helper column only)
+    # This ensures they are treated as valid numbers (likely debits if 0) and not dropped
+    df["Amount"] = df["Outstanding Amount"].fillna(0.0).astype(float)
 
     # Sort for FIFO
-    df = df.sort_values(["CustomerCode", "Transdate"]).reset_index(drop=True)
+    df = df.sort_values(["CustomerCode", "Invoice/Receipt Date"]).reset_index(drop=True)
 
     output_list = []
 
@@ -91,7 +96,7 @@ def process_settlement(df):
         pending_final = pd.DataFrame(columns=df.columns)
 
     # Restore original sort order
-    pending_final = pending_final.sort_values(["CustomerCode", "Transdate"]).reset_index(drop=True)
+    pending_final = pending_final.sort_values(["CustomerCode", "Invoice/Receipt Date"]).reset_index(drop=True)
 
     # Remove helper column "Amount"
     pending_final = pending_final.drop(columns=["Amount"])

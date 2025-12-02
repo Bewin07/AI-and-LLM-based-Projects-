@@ -7,7 +7,7 @@ class TestFIFO(unittest.TestCase):
         # Setup Data
         data = pd.DataFrame({
             'CustomerCode': ['C1', 'C1', 'C1', 'C2', 'C2'],
-            'Transdate': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-01', '2023-01-02'],
+            'Invoice/Receipt Date': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-01', '2023-01-02'],
             'InvoiceType': ['Inv', 'Inv', 'Pay', 'Inv', 'Pay'],
             'Outstanding Amount': [100.0, 50.0, -120.0, 200.0, -50.0]
         })
