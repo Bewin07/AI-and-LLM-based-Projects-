@@ -1,2 +1,4 @@
-# KeywordIQ
-KeywordIQ Studio is an AI-powered marketing and SEO intelligence platform that analyzes websites and search results using NLP and GenAI. It extracts top keywords, metadata, and trends, then uses Groq Llama to generate insights, content gaps, and SEO-optimized keyword suggestions.
+
+# Data-Science-Projects
+This repository contains multiple data science projects designed to explore various real-world datasets. Each folder demonstrates a complete project pipeline — including problem definition, data exploration, feature engineering, model building, evaluation, and insights.
+
