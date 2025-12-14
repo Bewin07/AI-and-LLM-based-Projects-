@@ -1,0 +1,1 @@
+A curated collection of hands-on projects built using Artificial Intelligence and Large Language Models. This repository covers real-world implementations including LLM applications, RAG systems, NLP pipelines, chatbots, embeddings, and end-to-end AI solutions—focused on practical learning, experimentation, and production-ready ideas 🚀🤖
