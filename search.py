@@ -2,7 +2,13 @@ from serpapi import GoogleSearch
 
 
 # 🔑 Replace with your actual API key
-api_key = "4a917b1bc35f18cb4322a45a3bac68a6d8428816232b58bb0f0b6b1f9c911905"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# 🔑 Replace with your actual API key
+api_key = os.getenv("SERPAPI_API_KEY")
 
 def get_google_results(query, num_results=5, location="India"):
     params = {

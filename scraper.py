@@ -32,13 +32,18 @@ def scrape_page_details(url):
     text_content = " ".join(paragraphs)
 
     # 🔑 Meta Keywords
-    meta_tag = soup.find("meta", attrs={"name": "keywords" , 'name':'description'})
-    meta_keywords = meta_tag["content"].strip() if meta_tag and "content" in meta_tag.attrs else None
+    meta_keywords_tag = soup.find("meta", attrs={"name": "keywords"})
+    meta_keywords = meta_keywords_tag["content"].strip() if meta_keywords_tag and "content" in meta_keywords_tag.attrs else None
+
+    # 📄 Meta Description
+    meta_desc_tag = soup.find("meta", attrs={"name": "description"})
+    meta_description = meta_desc_tag["content"].strip() if meta_desc_tag and "content" in meta_desc_tag.attrs else None
 
     return {
         "url": url,
         "title": title,
         "keywords": meta_keywords,
+        "description": meta_description,
         "content": text_content  # limit to 1000 chars for readability
     }
 

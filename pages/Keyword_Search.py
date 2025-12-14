@@ -8,7 +8,7 @@ from typing import List, Dict, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from search import get_google_results
 from scraper import scrape_page_details
-from nlp_kewords import process_text_chunk, extract_keywords_keybert
+from nlp_keywords import process_text_chunk, extract_keywords_keybert
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -420,102 +420,4 @@ else:
         - Detailed metrics
         """)
 
-# import streamlit as st
-# import streamlit.components.v1 as components
-# import pandas as pd
-# from search import get_google_results
-# from scraper import scrape_page_details
-# from nlp_kewords import process_text_chunk, extract_keywords_keybert
 
-# st.set_page_config(page_title="Keyword Search", page_icon="🔍", layout="wide")
-
-# st.title("🔍 KeywordIQ — Smart Search & Extraction")
-# st.markdown("### Search topics, scrape pages, and extract key concepts automatically.")
-
-# # --- Sidebar controls ---
-# st.sidebar.header("⚙️ Configuration")
-# query = st.sidebar.text_input("Enter search keyword:")
-# num_results = st.sidebar.slider("Number of results to fetch", 1, 10, 5)
-# method = st.sidebar.radio("Keyword Extraction Method", ["RAKE", "KeyBERT"])
-# run_search = st.sidebar.button("Run Search 🔎")
-
-# # --- Main Logic ---
-# if run_search and query.strip():
-#     with st.spinner("Fetching Google search results..."):
-#         results = get_google_results(query, num_results=num_results)
-
-#     if not results:
-#         st.error("❌ No search results found. Check your API key or query.")
-#     else:
-#         st.success(f"✅ Found {len(results)} results for '{query}'")
-#         st.subheader(f"Search Results for: **{query}**")
-
-#         all_data = []
-#         progress = st.progress(0)
-
-#         for i, res in enumerate(results):
-#             title = res.get("title", "Untitled")
-#             url = res.get("link", "")
-#             snippet = res.get("snippet", "")
-
-#             with st.expander(f"{i+1}. {title}"):
-#                 st.write(f"🔗 [Visit Website]({url})")
-#                 st.caption(snippet)
-
-#                 # --- Scrape the page ---
-#                 page = scrape_page_details(url)
-#                 if not page:
-#                     st.warning("Failed to scrape content.")
-#                     continue
-
-#                 st.write(f"**Scraped Title:** {page['title'] or 'N/A'}")
-#                 st.write(f"**Meta Keywords:** {page['keywords'] or 'N/A'}")
-#                 st.write(f"**Content Preview:** {page['content'][:300]}...")
-
-#                 # --- Keyword Extraction ---
-#                 text = page["content"]
-#                 if method == "RAKE":
-#                     keywords = process_text_chunk(text)
-#                 else:
-#                     keywords = extract_keywords_keybert(text, top_n=10)
-
-#                 st.markdown("**🧠 Extracted Keywords:**")
-#                 st.write(", ".join(keywords))
-
-#                 # --- Embedded Site Preview ---
-#                 st.markdown("#### 🌐 Site Preview:")
-#                 try:
-#                     components.iframe(url, height=400, scrolling=True)
-#                 except:
-#                     st.info(f"[Open site externally]({url})")
-
-#                 # --- Collect data ---
-#                 all_data.append({
-#                     "URL": url,
-#                     "Title": title,
-#                     "Snippet": snippet,
-#                     "Keywords": ", ".join(keywords)
-#                 })
-
-#             progress.progress((i + 1) / len(results))
-
-#         # --- Display and Save ---
-#         if all_data:
-#             df = pd.DataFrame(all_data)
-#             st.subheader("📊 Extracted Data Summary")
-#             st.dataframe(df)
-
-#             csv = df.to_csv(index=False).encode("utf-8")
-#             st.download_button(
-#                 "⬇️ Download Extracted Data (CSV)",
-#                 csv,
-#                 "keywordiq_results.csv",
-#                 "text/csv",
-#                 key="download-csv",
-#             )
-
-#             # Save to session for analytics page
-#             st.session_state["keyword_data"] = df
-
-# else:
-#     st.info("💡 Enter a keyword in the sidebar and click **Run Search 🔎** to begin.")
