@@ -2,7 +2,8 @@ import streamlit as st
 import os
 import tempfile
 import sys
-sys.path.append('src')
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
 from src.dataprocessor import run as process_pdf
 from src.QueryProcessor import process_user_query

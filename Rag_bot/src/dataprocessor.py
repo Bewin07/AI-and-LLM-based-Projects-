@@ -4,8 +4,8 @@ from embedder import embed_chunks
 from vectorstore import store_in_pinecone
 from typing import List
 
-pdf_path =r"resources\Attention is all u need new.pdf"
-def run(pdf_path=r"resources\Attention is all u need new.pdf"):
+pdf_path ="resources/Attention is all u need new.pdf"
+def run(pdf_path="resources/Attention is all u need new.pdf"):
     # Read HR Policy PDF and extract text
     pages = read_pdf(pdf_path)
 
