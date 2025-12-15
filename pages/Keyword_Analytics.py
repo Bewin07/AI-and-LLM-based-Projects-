@@ -22,14 +22,14 @@ warnings.simplefilter('ignore', Image.DecompressionBombWarning)
 # PAGE CONFIG
 # ---------------------------------------------------------------
 st.set_page_config(page_title="Keyword Analytics", page_icon="📊", layout="wide")
-st.title("📊 KeywordIQ — Enhanced Keyword Analytics")
+st.title("📊 SEOMaster — Enhanced Keyword Analytics")
 st.caption("Analyze, visualize, and understand keyword patterns intelligently.")
 
 # ---------------------------------------------------------------
 # LOAD DATA
 # ---------------------------------------------------------------
 st.sidebar.header("📂 Load Keyword Data")
-uploaded_file = st.sidebar.file_uploader("Upload keywordiq_results.csv", type=["csv"])
+uploaded_file = st.sidebar.file_uploader("Upload seomaster_results.csv", type=["csv"])
 use_demo = st.sidebar.checkbox("Use demo data")
 
 # SAMPLE DATA WHEN DEMO MODE IS ON
@@ -60,7 +60,7 @@ if uploaded_file:
 elif use_demo:
     df = sample_df
 else:
-    st.info("📥 Upload your `keywordiq_results.csv` or enable demo mode to view analytics.")
+    st.info("📥 Upload your `seomaster_results.csv` or enable demo mode to view analytics.")
     st.stop()
 
 st.success("✅ Keyword data loaded successfully!")

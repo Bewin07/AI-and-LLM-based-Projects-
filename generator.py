@@ -1,6 +1,6 @@
 """
 generator.py — AI Keyword Generator using Groq Llama API
-Author: KeywordIQ Team
+Author: SEOMaster Team
 """
 
 import os

@@ -4,8 +4,8 @@ import time
 
 # --- App Configuration ---
 st.set_page_config(
-    page_title="KeywordIQ - AI Keyword Intelligence",
-    page_icon="🧠",
+    page_title="SEOMaster - AI Keyword Intelligence",
+    page_icon="🚀",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -13,69 +13,133 @@ st.set_page_config(
 # --- Custom CSS Styling ---
 st.markdown("""
 <style>
-    /* Main gradient header */
+    /* Global Theme & Reset */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+        --accent-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+        --glass-bg: rgba(255, 255, 255, 0.95);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+        --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        --text-dark: #1a202c;
+        --text-light: #f7fafc;
+    }
+
+    .stApp {
+        background: #f8f9fa;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Hero Section - Modern & Techy */
     .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-        padding: 3rem 2rem;
-        border-radius: 15px;
+        background: var(--primary-gradient);
+        padding: 4rem 2rem;
+        border-radius: 20px;
         color: white;
         text-align: center;
-        margin-bottom: 2rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        margin-bottom: 3rem;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        position: relative;
+        overflow: hidden;
     }
     
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(circle at top right, rgba(0,198,255,0.2), transparent 40%);
+        pointer-events: none;
+    }
+
     .hero-title {
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 0.5rem;
+        letter-spacing: -1px;
+        background: linear-gradient(to right, #ffffff, #a5b4fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     
     .hero-subtitle {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
         font-weight: 300;
-        opacity: 0.95;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
-    
-    /* Feature cards */
+
+    /* Feature Cards - Glassmorphism */
     .feature-card {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        padding: 2rem;
-        border-radius: 12px;
+        background: white;
+        padding: 2.5rem;
+        border-radius: 16px;
         height: 100%;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-left: 5px solid #667eea;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
     }
     
     .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px -10px rgba(0,114,255,0.15);
+        border-color: #0072ff;
+    }
+
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--accent-gradient);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+        transform-origin: left;
+    }
+
+    .feature-card:hover::after {
+        transform: scaleX(1);
     }
     
     .feature-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
+        font-size: 2.5rem;
+        margin-bottom: 1.2rem;
+        background: #ebf8ff;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
     }
     
     .feature-title {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: #2d3748;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
     }
     
     .feature-description {
-        color: #4a5568;
+        color: #718096;
         line-height: 1.6;
+        font-size: 0.95rem;
     }
     
-    /* Stats section */
+    /* Stats Container */
     .stats-container {
-        background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+        display: flex;
+        justify-content: space-around;
         padding: 2rem;
-        border-radius: 12px;
-        margin: 2rem 0;
-        color: white;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+        margin: 3rem 0;
+        border: 1px solid #e2e8f0;
     }
     
     .stat-item {
@@ -85,105 +149,98 @@ st.markdown("""
     .stat-number {
         font-size: 2.5rem;
         font-weight: 800;
+        color: #0072ff;
         display: block;
+        margin-bottom: 0.2rem;
     }
     
     .stat-label {
-        font-size: 1rem;
-        opacity: 0.9;
+        font-size: 0.9rem;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
     }
-    
-    /* Process steps */
+
+    /* Process Steps */
     .process-step {
         background: white;
-        padding: 1.5rem;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-        border-left: 4px solid #667eea;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        transition: box-shadow 0.3s ease;
-        color: #4a148c;
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+        border: 1px solid #edf2f7;
+        transition: transform 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
     }
     
+    .process-step:hover {
+        transform: translateX(5px);
+        border-color: #bee3f8;
+    }
+
     .step-number {
-        display: inline-block;
-        background: #667eea;
+        background: var(--accent-gradient);
         color: white;
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        text-align: center;
-        line-height: 35px;
+        min-width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: bold;
-        margin-right: 1rem;
-        font-color: #2d3748;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 10px rgba(0,114,255,0.3);
     }
     
-    /* CTA buttons */
-    .cta-button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 8px;
-        text-decoration: none;
-        display: inline-block;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border: none;
-        cursor: pointer;
-    }
-    
-    .cta-button:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-    }
-    
-    /* Tech stack badges */
+    /* Tech Badges */
     .tech-badge {
         display: inline-block;
-        background: #e3f2fd;
-        color: #1976d2;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        margin: 0.3rem;
+        background: white;
+        color: #4a5568;
+        padding: 0.6rem 1.2rem;
+        border-radius: 50px;
+        margin: 0.4rem;
         font-weight: 600;
         font-size: 0.9rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        transition: all 0.2s;
     }
     
-    /* Animated gradient text */
-    .gradient-text {
-        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #667eea);
-        background-size: 300% 300%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: gradient 3s ease infinite;
+    .tech-badge:hover {
+        border-color: #0072ff;
+        color: #0072ff;
+        transform: translateY(-2px);
     }
-    
-    @keyframes gradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    
+
     /* Footer */
     .footer {
         text-align: center;
-        padding: 2rem;
-        background: #2d3748;
-        color: white;
-        border-radius: 10px;
-        margin-top: 3rem;
+        padding: 4rem 2rem;
+        background: #1a202c;
+        color: #a0aec0;
+        border-radius: 20px 20px 0 0;
+        margin-top: 5rem;
     }
     
-    /* Testimonial card */
-    .testimonial {
-        background: #f7fafc;
-        padding: 1.5rem;
-        border-radius: 10px;
-        border-left: 4px solid #48bb78;
-        margin: 1rem 0;
-        font-style: italic;
+    .footer h3 {
+        color: white;
+        margin-bottom: 1rem;
     }
+    
+    .cta-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 3rem;
+        text-align: center;
+        color: white;
+        margin-top: 3rem;
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -199,11 +256,10 @@ if "last_visit" not in st.session_state:
 # --- Hero Section ---
 st.markdown("""
 <div class="hero-section">
-    <div class="hero-title">🧠 KeywordIQ</div>
-    <div class="hero-subtitle">AI-Powered Keyword Intelligence Platform</div>
-    <p style="margin-top: 1rem; font-size: 1.1rem;">
-        Transform your SEO strategy with intelligent keyword research, 
-        real-time web scraping, and AI-driven insights
+    <div class="hero-title">🚀 SEOMaster</div>
+    <div class="hero-subtitle">Next-Gen AI Keyword Intelligence Platform</div>
+    <p style="margin-top: 1.5rem; font-size: 1.1rem; opacity: 0.8;">
+        Dominate the SERPs with intelligent, data-driven keyword research powered by advanced AI and real-time scraping.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -298,7 +354,7 @@ with col3:
 st.markdown("<br>", unsafe_allow_html=True)
 
 # --- How It Works Section ---
-st.markdown("## 🎯 How KeywordIQ Works")
+st.markdown("## 🎯 How SEOMaster Works")
 
 col1, col2 = st.columns([2, 1])
 
@@ -306,26 +362,34 @@ with col1:
     st.markdown("""
     <div class="process-step">
         <span class="step-number">1</span>
-        <strong>Enter Search Topic</strong><br>
-        Start by entering your target keyword or topic (e.g., "AI tools 2025", "machine learning trends")
+        <div>
+            <strong>Enter Search Topic</strong><br>
+            <span style="color: #718096; font-size: 0.9rem;">Start by entering your target keyword or topic (e.g., "AI tools 2025")</span>
+        </div>
     </div>
     
     <div class="process-step">
         <span class="step-number">2</span>
-        <strong>Fetch Google Results</strong><br>
-        Our system queries Google via SerpApi and retrieves the top-ranking pages for your keyword
+        <div>
+            <strong>Fetch Google Results</strong><br>
+            <span style="color: #718096; font-size: 0.9rem;">Our system queries Google via SerpApi for top-ranking pages</span>
+        </div>
     </div>
     
     <div class="process-step">
         <span class="step-number">3</span>
-        <strong>Intelligent Scraping</strong><br>
-        Each page is scraped for titles, meta tags, descriptions, and full text content
+        <div>
+            <strong>Intelligent Scraping</strong><br>
+            <span style="color: #718096; font-size: 0.9rem;">We extract titles, meta tags, and full text content instantly</span>
+        </div>
     </div>
     
     <div class="process-step">
         <span class="step-number">4</span>
-        <strong>NLP Analysis</strong><br>
-        Advanced algorithms (RAKE/KeyBERT) extract the most relevant keywords and phrases
+        <div>
+            <strong>NLP Analysis</strong><br>
+            <span style="color: #718096; font-size: 0.9rem;">Advanced algorithms (RAKE/KeyBERT) extract high-value keywords</span>
+        </div>
     </div>
     
     <div class="process-step">
@@ -429,13 +493,13 @@ col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
     st.markdown("""
-    <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
-        <h3 style="margin-top: 0;">Start Your Keyword Research Now</h3>
-        <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
-            Navigate to <strong>🔍 Keyword Search</strong> in the sidebar to begin exploring
+    <div class="cta-box">
+        <h2 style="margin-top: 0; font-weight: 800;">Start Your Research Now</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+            Unlock the power of AI-driven SEO analysis today.
         </p>
-        <p style="margin-bottom: 0; opacity: 0.9;">
-            ⚡ Free • No signup required • Instant results
+        <p style="background: rgba(255,255,255,0.2); display: inline-block; padding: 0.5rem 1rem; border-radius: 50px;">
+            Navigate to <strong>🔍 Keyword Search</strong> in the sidebar
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -504,21 +568,17 @@ st.markdown("<br><br>", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="footer">
-    <h3 style="margin-top: 0;">🧠 KeywordIQ</h3>
+    <h3 style="margin-top: 0;">🚀 SEOMaster</h3>
     <p style="margin: 1rem 0;">
-        Empowering digital marketers with AI-driven keyword intelligence
+        Empowering digital marketers with next-gen AI keyword intelligence
     </p>
-    <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 1rem;">
-        Built with ❤️ using Streamlit • SerpApi • Groq Llama 3 • KeyBERT
+    <p style="font-size: 0.9rem; opacity: 0.6; margin-bottom: 2rem;">
+        Built with Premium Tech • Streamlit • SerpApi • Groq Llama 3
     </p>
-    <p style="font-size: 0.85rem; margin: 0;">
-        © 2025 KeywordIQ. All rights reserved. | 
-        <a href="#" style="color: #90cdf4; text-decoration: none;">Privacy Policy</a> | 
-        <a href="#" style="color: #90cdf4; text-decoration: none;">Terms of Service</a> | 
-        <a href="#" style="color: #90cdf4; text-decoration: none;">Contact</a>
-    </p>
-    <p style="font-size: 0.8rem; margin-top: 1rem; opacity: 0.7;">
-        Last updated: November 2025 • Version 2.0
-    </p>
+    <div style="border-top: 1px solid #2d3748; padding-top: 2rem; margin-top: 2rem;">
+        <p style="font-size: 0.85rem; margin: 0; color: #718096;">
+            © 2025 SEOMaster. All rights reserved. 
+        </p>
+    </div>
 </div>
 """, unsafe_allow_html=True)

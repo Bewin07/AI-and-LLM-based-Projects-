@@ -12,7 +12,7 @@ from nlp_keywords import process_text_chunk, extract_keywords_keybert
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="KeywordIQ - Smart Search & Extraction",
+    page_title="SEOMaster - Smart Search & Extraction",
     page_icon="🔍",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -123,7 +123,7 @@ if "current_query" not in st.session_state:
 # --- Header ---
 st.markdown("""
 <div class="main-header">
-    <h1>🔍 KeywordIQ — Smart Search & Extraction</h1>
+    <h1>🔍 SEOMaster — Smart Search & Extraction</h1>
     <p>Advanced web scraping with AI-powered keyword extraction and analytics</p>
 </div>
 """, unsafe_allow_html=True)
@@ -339,7 +339,7 @@ if run_search:
                 st.download_button(
                     "⬇️ Download CSV",
                     csv,
-                    f"keywordiq_{query}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                    f"seomaster_{query}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                     "text/csv",
                     use_container_width=True
                 )
@@ -349,7 +349,7 @@ if run_search:
                 st.download_button(
                     "⬇️ Download JSON",
                     json_data,
-                    f"keywordiq_{query}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                    f"seomaster_{query}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                     "application/json",
                     use_container_width=True
                 )
