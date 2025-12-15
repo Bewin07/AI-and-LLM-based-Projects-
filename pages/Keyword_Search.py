@@ -21,26 +21,55 @@ st.set_page_config(
 # --- Custom CSS for better UI ---
 st.markdown("""
 <style>
+    /* Global Theme & Reset */
+    :root {
+        --primary-gradient: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+        --accent-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        --text-primary: #ffffff;
+        --text-secondary: #a0aec0;
+        --card-bg: rgba(17, 25, 40, 0.75);
+    }
+
+    .stApp {
+        background: #0f172a;
+        background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                          radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                          radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6 { color: white !important; }
+    p, li, span, div { color: #e2e8f0; }
+
+    /* Page Specific */
     .main-header {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        background: var(--primary-gradient);
         padding: 2rem;
         border-radius: 10px;
         color: white;
         margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        border: var(--glass-border);
     }
     .metric-card {
-        background: #f8f9fa;
+        background: var(--card-bg);
         padding: 1rem;
         border-radius: 8px;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #00c6ff;
+        border: var(--glass-border);
     }
     .keyword-tag {
         display: inline-block;
-        background: #e3f2fd;
+        background: rgba(0, 198, 255, 0.15);
+        color: white;
         padding: 0.3rem 0.8rem;
         margin: 0.2rem;
         border-radius: 15px;
         font-size: 0.9rem;
+        border: 1px solid rgba(0, 198, 255, 0.3);
     }
 </style>
 """, unsafe_allow_html=True)

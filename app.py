@@ -17,27 +17,41 @@ st.markdown("""
     :root {
         --primary-gradient: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
         --accent-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-        --glass-bg: rgba(255, 255, 255, 0.95);
-        --glass-border: 1px solid rgba(255, 255, 255, 0.2);
-        --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-        --text-dark: #1a202c;
-        --text-light: #f7fafc;
+        --glass-bg: rgba(255, 255, 255, 0.05); /* Darker glass */
+        --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        --text-primary: #ffffff;
+        --text-secondary: #a0aec0;
+        --card-bg: rgba(17, 25, 40, 0.75);
     }
 
     .stApp {
-        background: #f8f9fa;
+        background: #0f172a; /* Deep dark blue background */
+        background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                          radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                          radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+        color: var(--text-primary);
         font-family: 'Inter', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: white !important;
+    }
+    
+    p, li, span, div {
+        color: #e2e8f0;
     }
 
     /* Hero Section - Modern & Techy */
     .hero-section {
-        background: var(--primary-gradient);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
         padding: 4rem 2rem;
         border-radius: 20px;
         color: white;
         text-align: center;
         margin-bottom: 3rem;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        border: var(--glass-border);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         position: relative;
         overflow: hidden;
     }
@@ -45,9 +59,16 @@ st.markdown("""
     .hero-section::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: radial-gradient(circle at top right, rgba(0,198,255,0.2), transparent 40%);
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(0,198,255,0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
         pointer-events: none;
+    }
+    
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     .hero-title {
@@ -55,77 +76,63 @@ st.markdown("""
         font-weight: 900;
         margin-bottom: 0.5rem;
         letter-spacing: -1px;
-        background: linear-gradient(to right, #ffffff, #a5b4fc);
+        background: linear-gradient(to right, #00c6ff, #0072ff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 20px rgba(0, 114, 255, 0.3);
     }
     
     .hero-subtitle {
         font-size: 1.5rem;
         font-weight: 300;
-        opacity: 0.9;
+        color: var(--text-secondary);
         margin-bottom: 2rem;
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
     }
 
-    /* Feature Cards - Glassmorphism */
+    /* Feature Cards - Dark Glassmorphism */
     .feature-card {
-        background: white;
+        background: var(--card-bg);
         padding: 2.5rem;
         border-radius: 16px;
         height: 100%;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid rgba(0,0,0,0.05);
-        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-        position: relative;
-        overflow: hidden;
+        border: var(--glass-border);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
     
     .feature-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 20px 40px -10px rgba(0,114,255,0.15);
         border-color: #0072ff;
+        box-shadow: 0 20px 40px -10px rgba(0,114,255,0.2);
+        background: rgba(17, 25, 40, 0.9);
     }
 
-    .feature-card::after {
-        content: '';
-        position: absolute;
-        bottom: 0; left: 0;
-        width: 100%;
-        height: 4px;
-        background: var(--accent-gradient);
-        transform: scaleX(0);
-        transition: transform 0.4s ease;
-        transform-origin: left;
-    }
-
-    .feature-card:hover::after {
-        transform: scaleX(1);
-    }
-    
     .feature-icon {
         font-size: 2.5rem;
         margin-bottom: 1.2rem;
-        background: #ebf8ff;
+        background: rgba(0, 114, 255, 0.1);
         width: 60px;
         height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 12px;
+        border: 1px solid rgba(0, 114, 255, 0.2);
     }
     
     .feature-title {
         font-size: 1.4rem;
         font-weight: 700;
-        color: #2d3748;
+        color: white;
         margin-bottom: 0.8rem;
     }
     
     .feature-description {
-        color: #718096;
+        color: var(--text-secondary);
         line-height: 1.6;
         font-size: 0.95rem;
     }
@@ -135,28 +142,24 @@ st.markdown("""
         display: flex;
         justify-content: space-around;
         padding: 2rem;
-        background: white;
+        background: rgba(0, 0, 0, 0.2);
         border-radius: 16px;
-        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+        border: 1px solid rgba(255, 255, 255, 0.05);
         margin: 3rem 0;
-        border: 1px solid #e2e8f0;
-    }
-    
-    .stat-item {
-        text-align: center;
+        backdrop-filter: blur(5px);
     }
     
     .stat-number {
         font-size: 2.5rem;
         font-weight: 800;
-        color: #0072ff;
+        color: #00c6ff;
         display: block;
         margin-bottom: 0.2rem;
     }
     
     .stat-label {
         font-size: 0.9rem;
-        color: #718096;
+        color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 1px;
         font-weight: 600;
@@ -164,13 +167,12 @@ st.markdown("""
 
     /* Process Steps */
     .process-step {
-        background: white;
+        background: var(--card-bg);
         padding: 2rem;
         border-radius: 16px;
         margin-bottom: 1.5rem;
-        border: 1px solid #edf2f7;
+        border: var(--glass-border);
         transition: transform 0.2s ease;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         display: flex;
         align-items: flex-start;
         gap: 1.5rem;
@@ -178,11 +180,11 @@ st.markdown("""
     
     .process-step:hover {
         transform: translateX(5px);
-        border-color: #bee3f8;
+        border-color: #00c6ff;
     }
 
     .step-number {
-        background: var(--accent-gradient);
+        background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
         color: white;
         min-width: 40px;
         height: 40px;
@@ -195,35 +197,44 @@ st.markdown("""
         box-shadow: 0 4px 10px rgba(0,114,255,0.3);
     }
     
+    .process-step strong {
+        color: white;
+        font-size: 1.1rem;
+    }
+    
+    .process-step span {
+        color: var(--text-secondary) !important;
+    }
+
     /* Tech Badges */
     .tech-badge {
         display: inline-block;
-        background: white;
-        color: #4a5568;
+        background: rgba(255,255,255,0.05);
+        color: #e2e8f0;
         padding: 0.6rem 1.2rem;
         border-radius: 50px;
         margin: 0.4rem;
         font-weight: 600;
         font-size: 0.9rem;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
         transition: all 0.2s;
     }
     
     .tech-badge:hover {
-        border-color: #0072ff;
-        color: #0072ff;
-        transform: translateY(-2px);
+        border-color: #00c6ff;
+        color: #00c6ff;
+        background: rgba(0, 198, 255, 0.1);
     }
 
     /* Footer */
     .footer {
         text-align: center;
         padding: 4rem 2rem;
-        background: #1a202c;
-        color: #a0aec0;
+        background: rgba(0,0,0,0.2);
+        color: var(--text-secondary);
         border-radius: 20px 20px 0 0;
         margin-top: 5rem;
+        border-top: 1px solid rgba(255,255,255,0.05);
     }
     
     .footer h3 {
@@ -232,13 +243,14 @@ st.markdown("""
     }
     
     .cta-box {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, rgba(0, 198, 255, 0.1) 0%, rgba(0, 114, 255, 0.1) 100%);
         border-radius: 20px;
         padding: 3rem;
         text-align: center;
         color: white;
         margin-top: 3rem;
-        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+        border: 1px solid rgba(0, 114, 255, 0.3);
+        box-shadow: 0 0 40px rgba(0, 114, 255, 0.1);
     }
 
 </style>
