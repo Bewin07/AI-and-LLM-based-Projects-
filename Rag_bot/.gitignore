@@ -1,0 +1,14 @@
+# Virtual env
+rbotenv/
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# OS
+.DS_Store
