@@ -1,0 +1,7 @@
+# Ignore environment, data, and models in this directory
+osteoenv/
+models/best_resnet50.h5
+resources/
+output/
+__pycache__/
+*.pyc
