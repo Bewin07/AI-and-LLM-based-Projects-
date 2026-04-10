@@ -84,6 +84,14 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
     
     Returns: dataframe with 'Pending Amount' column
     """
+    # Create a safe callback wrapper that handles None
+    def safe_callback(percentage):
+        if progress_callback is not None and callable(progress_callback):
+            try:
+                progress_callback(percentage)
+            except Exception:
+                pass  # Silently ignore callback errors
+    
     # Clean data
     df = df.copy()
     df["Invoice/Receipt Date"] = pd.to_datetime(df["Invoice/Receipt Date"], dayfirst=True, errors="coerce")
@@ -118,18 +126,17 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
         total_groups = len(grouped_data)
         
         # Report progress start
-        if progress_callback:
-            progress_callback(5)  # 5% for setup
+        safe_callback(5)  # 5% for setup
         
         # Process in parallel with progress tracking
         with Pool(num_workers) as pool:
             results = []
             for i, result in enumerate(pool.imap_unordered(_process_customer_group, grouped_data)):
                 results.append(result)
-                if progress_callback and total_groups > 0:
+                if total_groups > 0:
                     # Progress from 5% to 95%
                     progress = 5 + int((i + 1) / total_groups * 90)
-                    progress_callback(min(progress, 95))
+                    safe_callback(min(progress, 95))
         
         if results:
             pending_final = pd.concat(results, ignore_index=True)
@@ -147,10 +154,10 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
                 output_list.append(result)
             
             # Report progress
-            if progress_callback and total_groups > 0:
+            if total_groups > 0:
                 # Progress from 5% to 95%
                 progress = 5 + int((idx + 1) / total_groups * 90)
-                progress_callback(min(progress, 95))
+                safe_callback(min(progress, 95))
         
         if output_list:
             pending_final = pd.concat(output_list, ignore_index=True)
@@ -158,8 +165,7 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
             pending_final = pd.DataFrame(columns=df.columns)
     
     # Report progress before final processing
-    if progress_callback:
-        progress_callback(95)
+    safe_callback(95)
     
     # Restore sort order
     pending_final = pending_final.sort_values(
@@ -173,7 +179,6 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
     pending_final["Pending Amount"] = pending_final["Pending Amount"].astype(float)
     
     # Report completion
-    if progress_callback:
-        progress_callback(100)
+    safe_callback(100)
     
     return pending_final
