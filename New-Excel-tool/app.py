@@ -66,14 +66,22 @@ if uploaded:
     st.write(f"Total rows: {len(df)}")
 
     # Process settlement using external logic with progress tracking
-    with st.spinner(f"⚙️ Processing {len(df)} rows with FIFO logic..."):
-        try:
-            # Auto-enable parallel processing for large files (>10MB)
-            use_parallel = file_size_mb > 10 or len(df) > 10000
-            pending_final = process_settlement(df, use_parallel=use_parallel)
-        except Exception as e:
-            st.error(f"❌ Error during processing: {str(e)}")
-            st.stop()
+    st.subheader("⚙️ Processing Settlement...")
+    progress_bar = st.progress(0)
+    progress_text = st.empty()
+    
+    def update_progress(percentage):
+        """Callback function to update progress bar"""
+        progress_bar.progress(percentage / 100.0)
+        progress_text.text(f"Progress: {percentage}% complete")
+    
+    try:
+        # Auto-enable parallel processing for large files (>10MB)
+        use_parallel = file_size_mb > 10 or len(df) > 10000
+        pending_final = process_settlement(df, use_parallel=use_parallel, progress_callback=update_progress)
+    except Exception as e:
+        st.error(f"❌ Error during processing: {str(e)}")
+        st.stop()
 
     processing_time = time.time() - start_time
     

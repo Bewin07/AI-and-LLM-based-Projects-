@@ -71,7 +71,7 @@ def _process_customer_group(args):
     result = pd.concat([debits, credits], ignore_index=False)
     return result
 
-def process_settlement(df, num_workers=None, use_parallel=True):
+def process_settlement(df, num_workers=None, use_parallel=True, progress_callback=None):
     """
     Applies FIFO settlement logic to the dataframe with parallel processing support.
     Optimized for large files (10MB+).
@@ -80,6 +80,7 @@ def process_settlement(df, num_workers=None, use_parallel=True):
     - df: Input dataframe
     - num_workers: Number of parallel processes (default: CPU count)
     - use_parallel: Whether to use parallel processing (auto-enabled for large files)
+    - progress_callback: Optional callback function to report progress (receives percentage 0-100)
     
     Returns: dataframe with 'Pending Amount' column
     """
@@ -114,10 +115,21 @@ def process_settlement(df, num_workers=None, use_parallel=True):
         
         # Create customer groups
         grouped_data = list(df.groupby("CustomerCode", sort=False))
+        total_groups = len(grouped_data)
         
-        # Process in parallel
+        # Report progress start
+        if progress_callback:
+            progress_callback(5)  # 5% for setup
+        
+        # Process in parallel with progress tracking
         with Pool(num_workers) as pool:
-            results = pool.map(_process_customer_group, grouped_data)
+            results = []
+            for i, result in enumerate(pool.imap_unordered(_process_customer_group, grouped_data)):
+                results.append(result)
+                if progress_callback and total_groups > 0:
+                    # Progress from 5% to 95%
+                    progress = 5 + int((i + 1) / total_groups * 90)
+                    progress_callback(min(progress, 95))
         
         if results:
             pending_final = pd.concat(results, ignore_index=True)
@@ -126,15 +138,28 @@ def process_settlement(df, num_workers=None, use_parallel=True):
     else:
         # Sequential processing for small files or Streamlit Cloud
         output_list = []
-        for cust, grp in df.groupby("CustomerCode", sort=False):
+        customer_groups = list(df.groupby("CustomerCode", sort=False))
+        total_groups = len(customer_groups)
+        
+        for idx, (cust, grp) in enumerate(customer_groups):
             result = _process_customer_group((cust, grp))
             if not result.empty:
                 output_list.append(result)
+            
+            # Report progress
+            if progress_callback and total_groups > 0:
+                # Progress from 5% to 95%
+                progress = 5 + int((idx + 1) / total_groups * 90)
+                progress_callback(min(progress, 95))
         
         if output_list:
             pending_final = pd.concat(output_list, ignore_index=True)
         else:
             pending_final = pd.DataFrame(columns=df.columns)
+    
+    # Report progress before final processing
+    if progress_callback:
+        progress_callback(95)
     
     # Restore sort order
     pending_final = pending_final.sort_values(
@@ -146,5 +171,9 @@ def process_settlement(df, num_workers=None, use_parallel=True):
     pending_final = pending_final.drop(columns=["Amount"])
     pending_final["Outstanding Amount"] = pending_final["Outstanding Amount"].astype(float)
     pending_final["Pending Amount"] = pending_final["Pending Amount"].astype(float)
+    
+    # Report completion
+    if progress_callback:
+        progress_callback(100)
     
     return pending_final
