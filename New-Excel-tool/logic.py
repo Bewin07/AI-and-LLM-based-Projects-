@@ -74,7 +74,7 @@ def _process_customer_group(args):
 def process_settlement(df, num_workers=None, use_parallel=True):
     """
     Applies FIFO settlement logic to the dataframe with parallel processing support.
-    Optimized for large files (40MB+).
+    Optimized for large files (10MB+).
     
     Parameters:
     - df: Input dataframe
@@ -106,7 +106,7 @@ def process_settlement(df, num_workers=None, use_parallel=True):
     
     # Disable parallel processing on Streamlit Cloud due to resource constraints
     # Force sequential processing for cloud deployment
-    should_use_parallel = use_parallel and (file_size_mb > 40 or num_customers > 100) and not IS_STREAMLIT_CLOUD
+    should_use_parallel = use_parallel and (file_size_mb > 10 or num_customers > 100) and not IS_STREAMLIT_CLOUD
     
     # Use parallel processing if: large file OR many customer groups AND not on Streamlit Cloud
     if should_use_parallel:

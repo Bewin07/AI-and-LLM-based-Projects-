@@ -10,7 +10,7 @@ st.title("📘 FIFO Pending Amount Settlement Tool Optimized")
 st.write("Upload one Excel file. Debits are positive. Credits are negative. FIFO logic is applied per customer.")
 
 # Show file size info
-st.info("⚡ **Performance:** Files >40MB use parallel processing for speed. Large files process in ~5 minutes.")
+st.info("⚡ **Performance:** Files >10MB use parallel processing for speed. Large files process very fast.")
 
 uploaded = st.file_uploader("Upload Excel File", type=["xlsx", "xls"])
 
@@ -68,8 +68,8 @@ if uploaded:
     # Process settlement using external logic with progress tracking
     with st.spinner(f"⚙️ Processing {len(df)} rows with FIFO logic..."):
         try:
-            # Auto-enable parallel processing for large files
-            use_parallel = file_size_mb > 40 or len(df) > 10000
+            # Auto-enable parallel processing for large files (>10MB)
+            use_parallel = file_size_mb > 10 or len(df) > 10000
             pending_final = process_settlement(df, use_parallel=use_parallel)
         except Exception as e:
             st.error(f"❌ Error during processing: {str(e)}")
@@ -113,7 +113,7 @@ if uploaded:
     st.success("🎉 Done! Your pending file is ready.")
     
     # Show performance info
-    if file_size_mb > 40:
+    if file_size_mb > 10:
         st.balloons()
         st.info(f"⚡ **Large file processed in {processing_time:.2f} seconds!** (Parallel processing enabled)")
 
