@@ -65,22 +65,20 @@ if uploaded:
     st.dataframe(df.head(50))
     st.write(f"Total rows: {len(df)}")
 
-    # Process settlement using external logic with progress tracking
-    st.subheader("⚙️ Processing Settlement...")
-    progress_bar = st.progress(0)
-    progress_text = st.empty()
-    
-    def update_progress(percentage):
-        """Callback function to update progress bar"""
-        progress_bar.progress(percentage / 100.0)
-        progress_text.text(f"Progress: {percentage}% complete")
+    # Process settlement using external logic
+    status_text = st.empty()
+    status_text.info("⚙️ Processing settlement with FIFO logic...")
     
     try:
         # Auto-enable parallel processing for large files (>10MB)
         use_parallel = file_size_mb > 10 or len(df) > 10000
-        pending_final = process_settlement(df, use_parallel=use_parallel, progress_callback=update_progress)
+        
+        # Use a simple progress indicator without callbacks (to avoid multiprocessing issues)
+        pending_final = process_settlement(df, use_parallel=use_parallel, progress_callback=None)
+        
+        status_text.success("✅ Processing complete!")
     except Exception as e:
-        st.error(f"❌ Error during processing: {str(e)}")
+        status_text.error(f"❌ Error during processing: {str(e)}")
         st.stop()
 
     processing_time = time.time() - start_time
