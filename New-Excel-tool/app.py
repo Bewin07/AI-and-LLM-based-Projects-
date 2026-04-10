@@ -6,7 +6,7 @@ from logic import process_settlement
 
 st.set_page_config(page_title="FIFO Pending Amount Tool", layout="wide")
 
-st.title("📘 FIFO Pending Amount Settlement Tool")
+st.title("📘 FIFO Pending Amount Settlement Tool Optimized")
 st.write("Upload one Excel file. Debits are positive. Credits are negative. FIFO logic is applied per customer.")
 
 # Show file size info
