@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 from multiprocessing import Pool, cpu_count
 from functools import partial
+import os
+
+# Detect if running on Streamlit Cloud
+IS_STREAMLIT_CLOUD = "STREAMLIT" in os.environ or os.path.exists("/mount/src")
 
 def _process_customer_group(args):
     """
@@ -100,8 +104,12 @@ def process_settlement(df, num_workers=None, use_parallel=True):
     num_customers = df["CustomerCode"].nunique()
     file_size_mb = df.memory_usage(deep=True).sum() / (1024 * 1024)
     
-    # Use parallel processing if: large file OR many customer groups
-    if use_parallel and (file_size_mb > 40 or num_customers > 100):
+    # Disable parallel processing on Streamlit Cloud due to resource constraints
+    # Force sequential processing for cloud deployment
+    should_use_parallel = use_parallel and (file_size_mb > 40 or num_customers > 100) and not IS_STREAMLIT_CLOUD
+    
+    # Use parallel processing if: large file OR many customer groups AND not on Streamlit Cloud
+    if should_use_parallel:
         num_workers = num_workers or max(2, cpu_count() - 1)
         
         # Create customer groups
@@ -116,7 +124,7 @@ def process_settlement(df, num_workers=None, use_parallel=True):
         else:
             pending_final = pd.DataFrame(columns=df.columns)
     else:
-        # Sequential processing for small files
+        # Sequential processing for small files or Streamlit Cloud
         output_list = []
         for cust, grp in df.groupby("CustomerCode", sort=False):
             result = _process_customer_group((cust, grp))
