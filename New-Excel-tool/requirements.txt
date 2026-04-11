@@ -4,3 +4,5 @@ openpyxl
 xlsxwriter
 google-generativeai
 numpy
+python-calamine
+joblib

@@ -28,8 +28,8 @@ if uploaded:
                 # For large files, read in chunks
                 if file_size_mb > 40:
                     st.write("🚀 Using optimized processing for large file...")
-                    # Read with optimized parameters for large files
-                    df = pd.read_excel(uploaded, engine='openpyxl')
+                    # Read with optimized parameters for large files (Calamine is 10x faster)
+                    df = pd.read_excel(uploaded, engine='calamine')
                 else:
                     df = pd.read_excel(uploaded)
             except Exception as e:

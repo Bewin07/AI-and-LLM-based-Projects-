@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-from multiprocessing import Pool, cpu_count
+from concurrent.futures import ThreadPoolExecutor
+from multiprocessing import cpu_count
 from functools import partial
 import os
 
@@ -128,15 +129,15 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
         # Report progress start
         safe_callback(5)  # 5% for setup
         
-        # Process in parallel with progress tracking
-        with Pool(num_workers) as pool:
-            results = []
-            for i, result in enumerate(pool.imap_unordered(_process_customer_group, grouped_data)):
-                results.append(result)
-                if total_groups > 0:
-                    # Progress from 5% to 95%
-                    progress = 5 + int((i + 1) / total_groups * 90)
-                    safe_callback(min(progress, 95))
+        from joblib import Parallel, delayed
+        
+        # Process in parallel using Joblib Loky backend (bypasses Windows __main__ issues safely)
+        results = Parallel(n_jobs=num_workers, backend="loky")(
+            delayed(_process_customer_group)(grp) for grp in grouped_data
+        )
+        
+        if total_groups > 0:
+            safe_callback(90)
         
         if results:
             pending_final = pd.concat(results, ignore_index=True)

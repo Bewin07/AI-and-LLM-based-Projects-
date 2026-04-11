@@ -1,13 +1,14 @@
 [client]
-maxUploadSize = 200
 showErrorDetails = true
 
 [server]
-maxUploadSize = 200
+maxUploadSize = 1024
 port = 8501
 headless = true
 fileWatcherType = "none"
 runOnSave = false
+enableXsrfProtection = false
+enableCORS = false
 
 [theme]
 primaryColor = "#FF6B6B"
@@ -21,6 +22,3 @@ level = "error"
 
 [browser]
 gatherUsageStats = false
-
-[client.toolbarMode]
-usePreferredTheme = false
