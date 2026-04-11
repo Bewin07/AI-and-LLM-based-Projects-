@@ -86,8 +86,8 @@ if uploaded:
 
         processing_time = time.time() - start_time
         
-        st.subheader("✅ Pending Amount Result")
-        st.dataframe(pending_final)
+        st.subheader("✅ Pending Amount Result Preview (Top 500 Rows)")
+        st.dataframe(pending_final.head(500))
         
         # Show summary stats
         input_sum = df['Outstanding Amount'].sum()
