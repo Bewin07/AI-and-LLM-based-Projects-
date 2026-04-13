@@ -107,8 +107,8 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
     # Create Amount column for processing
     df["Amount"] = df["Outstanding Amount"].fillna(0.0).astype(np.float32)
     
-    # Sort for FIFO (critical for correctness)
-    df = df.sort_values(["CustomerCode", "Invoice/Receipt Date"], ignore_index=True)
+    # Maintain original input order
+    df["_original_order"] = range(len(df))
     
     # Determine if parallel processing should be used
     num_customers = df["CustomerCode"].nunique()
@@ -168,11 +168,9 @@ def process_settlement(df, num_workers=None, use_parallel=True, progress_callbac
     # Report progress before final processing
     safe_callback(95)
     
-    # Restore sort order
-    pending_final = pending_final.sort_values(
-        ["CustomerCode", "Invoice/Receipt Date"], 
-        ignore_index=True
-    )
+    # Restore original input order
+    pending_final = pending_final.sort_values("_original_order")
+    pending_final = pending_final.drop(columns=["_original_order"]).reset_index(drop=True)
     
     # Remove helper column and convert Amount back to original precision
     pending_final = pending_final.drop(columns=["Amount"])
