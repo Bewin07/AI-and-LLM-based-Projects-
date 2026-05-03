@@ -6,7 +6,7 @@ from logic import process_settlement
 
 st.set_page_config(page_title="FIFO Pending Amount Tool", layout="wide")
 
-st.title("📘 FIFO Pending Amount Settlement Tool Optimized")
+st.title("📘 FIFO Pending Amount Settlement Tool Optimized (Variance Checked)")
 st.write("Upload one Excel file. Debits are positive. Credits are negative. FIFO logic is applied per customer.")
 
 # Show file size info
@@ -100,10 +100,28 @@ if uploaded:
         col3.metric("Total Pending Amount", f"{pending_sum:,.2f}")
         col4.metric("Processing Time", f"{processing_time:.2f}s", delta=f"File: {file_size_mb:.1f}MB")
 
-        if abs(input_sum - output_sum) > 0.01:
-            st.warning("⚠️ Discrepancy detected in Outstanding Amount sum!")
+        if abs(input_sum - output_sum) > 0.01 or abs(input_sum - pending_sum) > 0.01:
+            st.error("⚠️ Discrepancy detected! Input, Output, and Pending amounts do not match.")
+            
+            # Find variation by customer
+            cust_input = df.groupby('CustomerCode')['Outstanding Amount'].sum().reset_index()
+            cust_pending = pending_final.groupby('CustomerCode')['Pending Amount'].sum().reset_index()
+            
+            comparison = pd.merge(cust_input, cust_pending, on='CustomerCode', how='outer').fillna(0)
+            comparison['Difference'] = comparison['Outstanding Amount'] - comparison['Pending Amount']
+            
+            variations = comparison[abs(comparison['Difference']) > 0.01]
+            
+            if not variations.empty:
+                st.warning(f"🔍 Found variation in {len(variations)} customer(s). Below is the breakdown of the variation:")
+                st.dataframe(variations.rename(columns={
+                    "Outstanding Amount": "Input Outstanding Sum",
+                    "Pending Amount": "Output Pending Sum"
+                }))
+            else:
+                st.warning("Variation could not be isolated to specific customers (possible global data loss).")
         else:
-            st.success("✅ Input and Output Outstanding Amount sums match perfectly!")
+            st.success("✅ Input Total, Output Total, and Total Pending amounts match perfectly!")
 
         # Download
         def to_excel(df):
