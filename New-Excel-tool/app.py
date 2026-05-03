@@ -61,6 +61,9 @@ if uploaded:
         if missing:
             st.error(f"❌ Missing required columns: {missing}")
             st.stop()
+            
+        # Ensure CustomerCode is treated as string globally to avoid merge errors
+        df["CustomerCode"] = df["CustomerCode"].astype(str)
 
         st.subheader("📥 Input Preview")
         st.dataframe(df.head(50))
